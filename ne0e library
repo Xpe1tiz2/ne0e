@@ -131,6 +131,8 @@ function Ne0eLibrary:CreateWindow(title)
         return tabFrame
     end
     gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    gui.Enabled = true -- UI'yi görünür yap
+    main.Visible = true -- Ana frame'i görünür yap
     return main
 end
 
@@ -171,6 +173,72 @@ function Ne0eLibrary:CreateToggle(parent, args)
         if args.Callback then args.Callback(state) end
     end)
     return tgl
+end
+
+function Ne0eLibrary:CreateIntroWithWindow(text, duration, windowTitle)
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "Ne0eIntroGui"
+    local frame = Instance.new("Frame")
+    local glow = Instance.new("ImageLabel")
+    local label = Instance.new("TextLabel")
+    local icon = Instance.new("ImageLabel")
+    gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    frame.Parent = gui
+    frame.Size = UDim2.new(0, 420, 0, 140)
+    frame.Position = UDim2.new(0.5, -210, 0.5, -70)
+    frame.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    frame.BackgroundTransparency = 0.15
+    frame.BorderSizePixel = 0
+    frame.AnchorPoint = Vector2.new(0.5,0.5)
+    frame.ClipsDescendants = true
+    glow.Parent = frame
+    glow.Size = UDim2.new(1, 60, 1, 60)
+    glow.Position = UDim2.new(0, -30, 0, -30)
+    glow.BackgroundTransparency = 1
+    glow.Image = "rbxassetid://5028857084"
+    glow.ImageColor3 = Color3.fromRGB(0, 255, 180)
+    glow.ImageTransparency = 0.25
+    glow.ZIndex = 0
+    icon.Parent = frame
+    icon.Size = UDim2.new(0, 60, 0, 60)
+    icon.Position = UDim2.new(0, 20, 0, 40)
+    icon.BackgroundTransparency = 1
+    icon.Image = "rbxassetid://4483345998"
+    icon.ImageColor3 = Color3.fromRGB(0,255,180)
+    icon.ZIndex = 2
+    label.Parent = frame
+    label.Size = UDim2.new(1, -100, 1, 0)
+    label.Position = UDim2.new(0, 90, 0, 0)
+    label.BackgroundTransparency = 1
+    label.Text = text
+    label.TextColor3 = Color3.fromRGB(255,255,255)
+    label.Font = Enum.Font.GothamBlack
+    label.TextSize = 38
+    label.TextStrokeTransparency = 0.15
+    label.TextStrokeColor3 = Color3.fromRGB(0,255,180)
+    label.ZIndex = 3
+    label.TextWrapped = true
+    label.TextTransparency = 1
+    icon.ImageTransparency = 1
+    for i = 1, 20 do
+        label.TextTransparency = 1 - i/20
+        glow.ImageTransparency = 0.5 - i/40
+        icon.ImageTransparency = 1 - i/20
+        wait(0.03)
+    end
+    spawn(function()
+        wait(duration or 2)
+        for i = 1, 20 do
+            frame.BackgroundTransparency = 0.15 + i/20
+            label.TextTransparency = i/20
+            glow.ImageTransparency = 0.25 + i/20
+            icon.ImageTransparency = i/20
+            wait(0.04)
+        end
+        gui:Destroy()
+        -- Intro kapandıktan sonra ana UI açılır
+        Ne0eLibrary:CreateWindow(windowTitle)
+    end)
 end
 
 return Ne0eLibrary

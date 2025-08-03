@@ -1,7 +1,6 @@
--- Ne0eLibrary: Modern, dikdörtgen, sol menülü, havalı intro efektli UI
+-- Ne0eLibrary: Orion benzeri, siyah, modern ve sol menülü UI
 local Ne0eLibrary = {}
 
--- Havalı intro efekti
 function Ne0eLibrary:CreateIntro(text, duration)
     local gui = Instance.new("ScreenGui")
     gui.Name = "Ne0eIntroGui"
@@ -73,11 +72,12 @@ function Ne0eLibrary:CreateWindow(title)
     main.Parent = gui
     main.Size = UDim2.new(0, 600, 0, 400)
     main.Position = UDim2.new(0.5, -300, 0.5, -200)
-    main.BackgroundColor3 = Color3.fromRGB(10,10,10)
+    main.BackgroundColor3 = Color3.fromRGB(15,15,15)
     main.BorderSizePixel = 0
     main.AnchorPoint = Vector2.new(0.5,0.5)
     main.Active = true
     main.Draggable = true
+    main.Visible = true
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Parent = main
     titleLabel.Size = UDim2.new(1, 0, 0, 50)
@@ -90,13 +90,15 @@ function Ne0eLibrary:CreateWindow(title)
     tabBar.Parent = main
     tabBar.Size = UDim2.new(0, 120, 1, -50)
     tabBar.Position = UDim2.new(0,0,0,50)
-    tabBar.BackgroundColor3 = Color3.fromRGB(20,20,20)
+    tabBar.BackgroundColor3 = Color3.fromRGB(25,25,25)
     tabBar.BorderSizePixel = 0
+    tabBar.Visible = true
     local content = Instance.new("Frame")
     content.Parent = main
     content.Size = UDim2.new(1, -120, 1, -50)
     content.Position = UDim2.new(0, 120, 0, 50)
     content.BackgroundTransparency = 1
+    content.Visible = true
     local Tabs = {}
     function main:AddTab(tabName)
         local tabBtn = Instance.new("TextButton")
@@ -104,13 +106,14 @@ function Ne0eLibrary:CreateWindow(title)
         tabBtn.Size = UDim2.new(1, 0, 0, 40)
         tabBtn.Position = UDim2.new(0, 0, 0, (#tabBar:GetChildren()-1)*45)
         tabBtn.Text = tabName
-        tabBtn.BackgroundColor3 = Color3.fromRGB(30,30,30)
+        tabBtn.BackgroundColor3 = Color3.fromRGB(35,35,35)
         tabBtn.TextColor3 = Color3.fromRGB(200,200,200)
         tabBtn.Font = Enum.Font.GothamBold
         tabBtn.TextSize = 20
         tabBtn.BorderSizePixel = 0
         tabBtn.AutoButtonColor = true
         tabBtn.ZIndex = 2
+        tabBtn.Visible = true
         local tabFrame = Instance.new("Frame")
         tabFrame.Parent = content
         tabFrame.Size = UDim2.new(1, 0, 1, 0)
@@ -122,7 +125,7 @@ function Ne0eLibrary:CreateWindow(title)
         tabBtn.MouseButton1Click:Connect(function()
             for _, t in pairs(Tabs) do
                 t.Frame.Visible = false
-                t.Button.BackgroundColor3 = Color3.fromRGB(30,30,30)
+                t.Button.BackgroundColor3 = Color3.fromRGB(35,35,35)
             end
             tabFrame.Visible = true
             tabBtn.BackgroundColor3 = Color3.fromRGB(80, 120, 200)
@@ -131,8 +134,8 @@ function Ne0eLibrary:CreateWindow(title)
         return tabFrame
     end
     gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-    gui.Enabled = true -- UI'yi görünür yap
-    main.Visible = true -- Ana frame'i görünür yap
+    gui.Enabled = true
+    main.Visible = true
     return main
 end
 
@@ -149,6 +152,7 @@ function Ne0eLibrary:CreateButton(parent, args)
     btn.BorderSizePixel = 0
     btn.AutoButtonColor = true
     btn.ZIndex = 3
+    btn.Visible = true
     btn.MouseButton1Click:Connect(args.Callback)
     return btn
 end
@@ -167,78 +171,13 @@ function Ne0eLibrary:CreateToggle(parent, args)
     tgl.BorderSizePixel = 0
     tgl.AutoButtonColor = true
     tgl.ZIndex = 3
+    tgl.Visible = true
     tgl.MouseButton1Click:Connect(function()
         state = not state
         tgl.Text = args.Name .. (state and " [AÇIK]" or " [KAPALI]")
         if args.Callback then args.Callback(state) end
     end)
     return tgl
-end
-
-function Ne0eLibrary:CreateIntroWithWindow(text, duration, windowTitle)
-    local gui = Instance.new("ScreenGui")
-    gui.Name = "Ne0eIntroGui"
-    local frame = Instance.new("Frame")
-    local glow = Instance.new("ImageLabel")
-    local label = Instance.new("TextLabel")
-    local icon = Instance.new("ImageLabel")
-    gui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-    frame.Parent = gui
-    frame.Size = UDim2.new(0, 420, 0, 140)
-    frame.Position = UDim2.new(0.5, -210, 0.5, -70)
-    frame.BackgroundColor3 = Color3.fromRGB(10,10,10)
-    frame.BackgroundTransparency = 0.15
-    frame.BorderSizePixel = 0
-    frame.AnchorPoint = Vector2.new(0.5,0.5)
-    frame.ClipsDescendants = true
-    glow.Parent = frame
-    glow.Size = UDim2.new(1, 60, 1, 60)
-    glow.Position = UDim2.new(0, -30, 0, -30)
-    glow.BackgroundTransparency = 1
-    glow.Image = "rbxassetid://5028857084"
-    glow.ImageColor3 = Color3.fromRGB(0, 255, 180)
-    glow.ImageTransparency = 0.25
-    glow.ZIndex = 0
-    icon.Parent = frame
-    icon.Size = UDim2.new(0, 60, 0, 60)
-    icon.Position = UDim2.new(0, 20, 0, 40)
-    icon.BackgroundTransparency = 1
-    icon.Image = "rbxassetid://4483345998"
-    icon.ImageColor3 = Color3.fromRGB(0,255,180)
-    icon.ZIndex = 2
-    label.Parent = frame
-    label.Size = UDim2.new(1, -100, 1, 0)
-    label.Position = UDim2.new(0, 90, 0, 0)
-    label.BackgroundTransparency = 1
-    label.Text = text
-    label.TextColor3 = Color3.fromRGB(255,255,255)
-    label.Font = Enum.Font.GothamBlack
-    label.TextSize = 38
-    label.TextStrokeTransparency = 0.15
-    label.TextStrokeColor3 = Color3.fromRGB(0,255,180)
-    label.ZIndex = 3
-    label.TextWrapped = true
-    label.TextTransparency = 1
-    icon.ImageTransparency = 1
-    for i = 1, 20 do
-        label.TextTransparency = 1 - i/20
-        glow.ImageTransparency = 0.5 - i/40
-        icon.ImageTransparency = 1 - i/20
-        wait(0.03)
-    end
-    spawn(function()
-        wait(duration or 2)
-        for i = 1, 20 do
-            frame.BackgroundTransparency = 0.15 + i/20
-            label.TextTransparency = i/20
-            glow.ImageTransparency = 0.25 + i/20
-            icon.ImageTransparency = i/20
-            wait(0.04)
-        end
-        gui:Destroy()
-        -- Intro kapandıktan sonra ana UI açılır
-        Ne0eLibrary:CreateWindow(windowTitle)
-    end)
 end
 
 return Ne0eLibrary

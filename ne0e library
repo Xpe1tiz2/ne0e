@@ -28,7 +28,7 @@ function Ne0eLibrary:CreateIntro(text, duration)
     IntroFrame.Size = UDim2.new(0, 420, 0, 140)
     IntroFrame.Position = UDim2.new(0.5, -210, 0.5, -70)
     IntroFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
-    IntroFrame.BackgroundTransparency = 1 -- Tam saydam yapıldı
+    IntroFrame.BackgroundTransparency = 0.2 -- Hafif saydam siyah
     IntroFrame.BorderSizePixel = 0
     IntroFrame.AnchorPoint = Vector2.new(0.5, 0.5)
     IntroFrame.ClipsDescendants = true
@@ -114,11 +114,11 @@ function Ne0eLibrary:CreateWindow(title)
     MainFrame.Size = UDim2.new(0, 420, 0, 340)
     MainFrame.Position = UDim2.new(0.5, -210, 0.5, -170)
     MainFrame.BackgroundColor3 = Color3.fromRGB(35, 40, 55)
+    MainFrame.BackgroundTransparency = 0.2 -- Hafif saydam siyah pencere
     MainFrame.BorderSizePixel = 0
     MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
     MainFrame.Active = true
     MainFrame.Draggable = true
-    MainFrame.BackgroundTransparency = 1 -- Tam saydam pencere
     MainFrame.ClipsDescendants = true
     addShadow(MainFrame)
 

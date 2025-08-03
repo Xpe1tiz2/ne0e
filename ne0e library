@@ -28,7 +28,7 @@ function Ne0eLibrary:CreateIntro(text, duration)
     IntroFrame.Size = UDim2.new(0, 420, 0, 140)
     IntroFrame.Position = UDim2.new(0.5, -210, 0.5, -70)
     IntroFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
-    IntroFrame.BackgroundTransparency = 0.08
+    IntroFrame.BackgroundTransparency = 1 -- Tam saydam yapıldı
     IntroFrame.BorderSizePixel = 0
     IntroFrame.AnchorPoint = Vector2.new(0.5, 0.5)
     IntroFrame.ClipsDescendants = true
@@ -118,7 +118,7 @@ function Ne0eLibrary:CreateWindow(title)
     MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
     MainFrame.Active = true
     MainFrame.Draggable = true
-    MainFrame.BackgroundTransparency = 0.05
+    MainFrame.BackgroundTransparency = 1 -- Tam saydam pencere
     MainFrame.ClipsDescendants = true
     addShadow(MainFrame)
 
@@ -185,12 +185,13 @@ function Ne0eLibrary:CreateWindow(title)
     return MainFrame
 end
 
-function Ne0eLibrary:CreateButton(parent, btnName, callback)
+function Ne0eLibrary:CreateButton(parent, args)
+    -- args: { Name = <string>, Callback = <function> }
     local Button = Instance.new("TextButton")
     Button.Parent = parent
     Button.Size = UDim2.new(0, 160, 0, 38)
     Button.Position = UDim2.new(0, 20, 0, 10 + (#parent:GetChildren()-1)*45)
-    Button.Text = btnName
+    Button.Text = args.Name or "Button"
     Button.BackgroundColor3 = Color3.fromRGB(60, 120, 220)
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
     Button.Font = Enum.Font.GothamBold
@@ -198,16 +199,18 @@ function Ne0eLibrary:CreateButton(parent, btnName, callback)
     Button.BorderSizePixel = 0
     Button.AutoButtonColor = true
     Button.ZIndex = 3
-    Button.MouseButton1Click:Connect(callback)
+    Button.MouseButton1Click:Connect(args.Callback)
     return Button
 end
 
-function Ne0eLibrary:CreateToggle(parent, toggleName, callback)
+function Ne0eLibrary:CreateToggle(parent, args)
+    -- args: { Name = <string>, Default = <boolean>, Callback = <function> }
     local Toggle = Instance.new("TextButton")
     Toggle.Parent = parent
     Toggle.Size = UDim2.new(0, 160, 0, 38)
     Toggle.Position = UDim2.new(0, 200, 0, 10 + (#parent:GetChildren()-1)*45)
-    Toggle.Text = toggleName .. " [KAPALI]"
+    local state = args.Default or false
+    Toggle.Text = args.Name .. (state and " [AÇIK]" or " [KAPALI]")
     Toggle.BackgroundColor3 = Color3.fromRGB(80, 180, 120)
     Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
     Toggle.Font = Enum.Font.GothamBold
@@ -215,11 +218,10 @@ function Ne0eLibrary:CreateToggle(parent, toggleName, callback)
     Toggle.BorderSizePixel = 0
     Toggle.AutoButtonColor = true
     Toggle.ZIndex = 3
-    local state = false
     Toggle.MouseButton1Click:Connect(function()
         state = not state
-        Toggle.Text = toggleName .. (state and " [AÇIK]" or " [KAPALI]")
-        callback(state)
+        Toggle.Text = args.Name .. (state and " [AÇIK]" or " [KAPALI]")
+        if args.Callback then args.Callback(state) end
     end)
     return Toggle
 end

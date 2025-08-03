@@ -19,37 +19,72 @@ function Ne0eLibrary:CreateIntro(text, duration)
     ScreenGui.Name = "Ne0eIntroGui"
     local IntroFrame = Instance.new("Frame")
     local IntroLabel = Instance.new("TextLabel")
+    local Glow = Instance.new("ImageLabel")
+    local Icon = Instance.new("ImageLabel")
     local CloseBtn = Instance.new("TextButton")
 
     ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
     IntroFrame.Parent = ScreenGui
-    IntroFrame.Size = UDim2.new(0, 400, 0, 100)
-    IntroFrame.Position = UDim2.new(0.5, -200, 0.5, -50)
+    IntroFrame.Size = UDim2.new(0, 420, 0, 140)
+    IntroFrame.Position = UDim2.new(0.5, -210, 0.5, -70)
     IntroFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+    IntroFrame.BackgroundTransparency = 0.08
     IntroFrame.BorderSizePixel = 0
     IntroFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-    IntroFrame.BackgroundTransparency = 0.1
     IntroFrame.ClipsDescendants = true
-    addShadow(IntroFrame)
+
+    -- Havali glow efekti
+    Glow.Parent = IntroFrame
+    Glow.Size = UDim2.new(1, 60, 1, 60)
+    Glow.Position = UDim2.new(0, -30, 0, -30)
+    Glow.BackgroundTransparency = 1
+    Glow.Image = "rbxassetid://5028857084"
+    Glow.ImageColor3 = Color3.fromRGB(0, 255, 180)
+    Glow.ImageTransparency = 0.25
+    Glow.ZIndex = 0
+
+    -- Logo/Icon
+    Icon.Parent = IntroFrame
+    Icon.Size = UDim2.new(0, 60, 0, 60)
+    Icon.Position = UDim2.new(0, 20, 0, 40)
+    Icon.BackgroundTransparency = 1
+    Icon.Image = "rbxassetid://4483345998" -- Değiştirilebilir
+    Icon.ImageColor3 = Color3.fromRGB(0,255,180)
+    Icon.ZIndex = 2
 
     IntroLabel.Parent = IntroFrame
-    IntroLabel.Size = UDim2.new(1, 0, 1, 0)
+    IntroLabel.Size = UDim2.new(1, -100, 1, 0)
+    IntroLabel.Position = UDim2.new(0, 90, 0, 0)
     IntroLabel.BackgroundTransparency = 1
     IntroLabel.Text = text
     IntroLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    IntroLabel.Font = Enum.Font.GothamBold
-    IntroLabel.TextSize = 32
-    IntroLabel.TextStrokeTransparency = 0.5
+    IntroLabel.Font = Enum.Font.GothamBlack
+    IntroLabel.TextSize = 38
+    IntroLabel.TextStrokeTransparency = 0.15
+    IntroLabel.TextStrokeColor3 = Color3.fromRGB(0,255,180)
+    IntroLabel.ZIndex = 3
+    IntroLabel.TextWrapped = true
+
+    -- Animasyonlu giriş
+    IntroLabel.TextTransparency = 1
+    Icon.ImageTransparency = 1
+    for i = 1, 20 do
+        IntroLabel.TextTransparency = 1 - i/20
+        Glow.ImageTransparency = 0.5 - i/40
+        Icon.ImageTransparency = 1 - i/20
+        wait(0.03)
+    end
 
     CloseBtn.Parent = IntroFrame
     CloseBtn.Size = UDim2.new(0, 30, 0, 30)
-    CloseBtn.Position = UDim2.new(1, -35, 0, 5)
+    CloseBtn.Position = UDim2.new(1, -35, 0, 10)
     CloseBtn.Text = "X"
     CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
     CloseBtn.TextColor3 = Color3.new(1,1,1)
     CloseBtn.Font = Enum.Font.GothamBold
     CloseBtn.TextSize = 18
     CloseBtn.BorderSizePixel = 0
+    CloseBtn.ZIndex = 4
     CloseBtn.MouseButton1Click:Connect(function()
         ScreenGui:Destroy()
     end)
@@ -57,9 +92,11 @@ function Ne0eLibrary:CreateIntro(text, duration)
     spawn(function()
         wait(duration or 2)
         for i = 1, 20 do
-            IntroFrame.BackgroundTransparency = i/20
+            IntroFrame.BackgroundTransparency = 0.08 + i/20
             IntroLabel.TextTransparency = i/20
-            wait(0.05)
+            Glow.ImageTransparency = 0.25 + i/20
+            Icon.ImageTransparency = i/20
+            wait(0.04)
         end
         ScreenGui:Destroy()
     end)

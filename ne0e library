@@ -1,51 +1,166 @@
+-- Ne0eLibrary: Modern, Türkçe, gelişmiş exploit UI kütüphanesi
 local Ne0eLibrary = {}
+
+-- Gölge efekti için
+local function addShadow(frame)
+    local shadow = Instance.new("ImageLabel")
+    shadow.Name = "Ne0eShadow"
+    shadow.Image = "rbxassetid://1316045217"
+    shadow.BackgroundTransparency = 1
+    shadow.Size = frame.Size + UDim2.new(0, 20, 0, 20)
+    shadow.Position = frame.Position + UDim2.new(0, -10, 0, -10)
+    shadow.ZIndex = frame.ZIndex - 1
+    shadow.Parent = frame.Parent
+    return shadow
+end
+
+function Ne0eLibrary:CreateIntro(text, duration)
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "Ne0eIntroGui"
+    local IntroFrame = Instance.new("Frame")
+    local IntroLabel = Instance.new("TextLabel")
+    local CloseBtn = Instance.new("TextButton")
+
+    ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+    IntroFrame.Parent = ScreenGui
+    IntroFrame.Size = UDim2.new(0, 400, 0, 100)
+    IntroFrame.Position = UDim2.new(0.5, -200, 0.5, -50)
+    IntroFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+    IntroFrame.BorderSizePixel = 0
+    IntroFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    IntroFrame.BackgroundTransparency = 0.1
+    IntroFrame.ClipsDescendants = true
+    addShadow(IntroFrame)
+
+    IntroLabel.Parent = IntroFrame
+    IntroLabel.Size = UDim2.new(1, 0, 1, 0)
+    IntroLabel.BackgroundTransparency = 1
+    IntroLabel.Text = text
+    IntroLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    IntroLabel.Font = Enum.Font.GothamBold
+    IntroLabel.TextSize = 32
+    IntroLabel.TextStrokeTransparency = 0.5
+
+    CloseBtn.Parent = IntroFrame
+    CloseBtn.Size = UDim2.new(0, 30, 0, 30)
+    CloseBtn.Position = UDim2.new(1, -35, 0, 5)
+    CloseBtn.Text = "X"
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+    CloseBtn.TextColor3 = Color3.new(1,1,1)
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.TextSize = 18
+    CloseBtn.BorderSizePixel = 0
+    CloseBtn.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
+
+    spawn(function()
+        wait(duration or 2)
+        for i = 1, 20 do
+            IntroFrame.BackgroundTransparency = i/20
+            IntroLabel.TextTransparency = i/20
+            wait(0.05)
+        end
+        ScreenGui:Destroy()
+    end)
+end
 
 function Ne0eLibrary:CreateWindow(title)
     local ScreenGui = Instance.new("ScreenGui")
-    local Frame = Instance.new("Frame")
+    ScreenGui.Name = "Ne0eMainGui"
+    local MainFrame = Instance.new("Frame")
     local Title = Instance.new("TextLabel")
+    local CloseBtn = Instance.new("TextButton")
 
     ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-    Frame.Parent = ScreenGui
-    Frame.Size = UDim2.new(0, 350, 0, 250)
-    Frame.Position = UDim2.new(0.5, -175, 0.5, -125)
-    Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    Frame.BorderSizePixel = 0
+    MainFrame.Parent = ScreenGui
+    MainFrame.Size = UDim2.new(0, 420, 0, 340)
+    MainFrame.Position = UDim2.new(0.5, -210, 0.5, -170)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(35, 40, 55)
+    MainFrame.BorderSizePixel = 0
+    MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+    MainFrame.Active = true
+    MainFrame.Draggable = true
+    MainFrame.BackgroundTransparency = 0.05
+    MainFrame.ClipsDescendants = true
+    addShadow(MainFrame)
 
-    Title.Parent = Frame
-    Title.Size = UDim2.new(1, 0, 0, 40)
+    Title.Parent = MainFrame
+    Title.Size = UDim2.new(1, 0, 0, 44)
     Title.BackgroundTransparency = 1
     Title.Text = title
     Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.Font = Enum.Font.SourceSansBold
-    Title.TextSize = 24
+    Title.Font = Enum.Font.GothamBold
+    Title.TextSize = 30
+    Title.TextStrokeTransparency = 0.5
 
-    return Frame
-end
+    CloseBtn.Parent = MainFrame
+    CloseBtn.Size = UDim2.new(0, 32, 0, 32)
+    CloseBtn.Position = UDim2.new(1, -36, 0, 6)
+    CloseBtn.Text = "X"
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
+    CloseBtn.TextColor3 = Color3.new(1,1,1)
+    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.TextSize = 18
+    CloseBtn.BorderSizePixel = 0
+    CloseBtn.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
 
-function Ne0eLibrary:CreateTab(parent, tabName)
-    local TabButton = Instance.new("TextButton")
-    TabButton.Parent = parent
-    TabButton.Size = UDim2.new(0, 100, 0, 30)
-    TabButton.Position = UDim2.new(0, 0, 0, 50 + (#parent:GetChildren()-2)*35)
-    TabButton.Text = tabName
-    TabButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TabButton.Font = Enum.Font.SourceSans
-    TabButton.TextSize = 18
-    return TabButton
+    -- Sekme listesi
+    local Tabs = {}
+    function MainFrame:AddTab(tabName)
+        local TabBtn = Instance.new("TextButton")
+        TabBtn.Parent = MainFrame
+        TabBtn.Size = UDim2.new(0, 120, 0, 36)
+        TabBtn.Position = UDim2.new(0, 10 + (#Tabs)*125, 0, 50)
+        TabBtn.Text = tabName
+        TabBtn.BackgroundColor3 = Color3.fromRGB(45, 50, 65)
+        TabBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+        TabBtn.Font = Enum.Font.GothamBold
+        TabBtn.TextSize = 20
+        TabBtn.BorderSizePixel = 0
+        TabBtn.AutoButtonColor = true
+        TabBtn.ZIndex = 2
+
+        local TabFrame = Instance.new("Frame")
+        TabFrame.Parent = MainFrame
+        TabFrame.Size = UDim2.new(1, -20, 1, -100)
+        TabFrame.Position = UDim2.new(0, 10, 0, 90)
+        TabFrame.BackgroundTransparency = 1
+        TabFrame.Visible = #Tabs == 0
+        TabFrame.Name = "Ne0eTab_" .. tabName
+        TabFrame.ZIndex = 1
+
+        TabBtn.MouseButton1Click:Connect(function()
+            for _, t in pairs(Tabs) do
+                t.Frame.Visible = false
+                t.Button.BackgroundColor3 = Color3.fromRGB(45, 50, 65)
+            end
+            TabFrame.Visible = true
+            TabBtn.BackgroundColor3 = Color3.fromRGB(80, 120, 200)
+        end)
+
+        table.insert(Tabs, {Button = TabBtn, Frame = TabFrame})
+        return TabFrame
+    end
+
+    return MainFrame
 end
 
 function Ne0eLibrary:CreateButton(parent, btnName, callback)
     local Button = Instance.new("TextButton")
     Button.Parent = parent
-    Button.Size = UDim2.new(0, 120, 0, 30)
-    Button.Position = UDim2.new(0, 110, 0, 50 + (#parent:GetChildren()-2)*35)
+    Button.Size = UDim2.new(0, 160, 0, 38)
+    Button.Position = UDim2.new(0, 20, 0, 10 + (#parent:GetChildren()-1)*45)
     Button.Text = btnName
-    Button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    Button.BackgroundColor3 = Color3.fromRGB(60, 120, 220)
     Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.Font = Enum.Font.SourceSans
+    Button.Font = Enum.Font.GothamBold
     Button.TextSize = 18
+    Button.BorderSizePixel = 0
+    Button.AutoButtonColor = true
+    Button.ZIndex = 3
     Button.MouseButton1Click:Connect(callback)
     return Button
 end
@@ -53,20 +168,32 @@ end
 function Ne0eLibrary:CreateToggle(parent, toggleName, callback)
     local Toggle = Instance.new("TextButton")
     Toggle.Parent = parent
-    Toggle.Size = UDim2.new(0, 120, 0, 30)
-    Toggle.Position = UDim2.new(0, 240, 0, 50 + (#parent:GetChildren()-2)*35)
-    Toggle.Text = toggleName .. " [OFF]"
-    Toggle.BackgroundColor3 = Color3.fromRGB(90, 90, 90)
+    Toggle.Size = UDim2.new(0, 160, 0, 38)
+    Toggle.Position = UDim2.new(0, 200, 0, 10 + (#parent:GetChildren()-1)*45)
+    Toggle.Text = toggleName .. " [KAPALI]"
+    Toggle.BackgroundColor3 = Color3.fromRGB(80, 180, 120)
     Toggle.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Toggle.Font = Enum.Font.SourceSans
+    Toggle.Font = Enum.Font.GothamBold
     Toggle.TextSize = 18
+    Toggle.BorderSizePixel = 0
+    Toggle.AutoButtonColor = true
+    Toggle.ZIndex = 3
     local state = false
     Toggle.MouseButton1Click:Connect(function()
         state = not state
-        Toggle.Text = toggleName .. (state and " [ON]" or " [OFF]")
+        Toggle.Text = toggleName .. (state and " [AÇIK]" or " [KAPALI]")
         callback(state)
     end)
     return Toggle
+end
+
+-- Hata önleyici: Parent kontrolü
+function Ne0eLibrary:SafeParent(obj, parent)
+    if parent and typeof(parent) == "Instance" then
+        obj.Parent = parent
+    else
+        warn("Ne0eLibrary: Parent hatalı veya eksik!")
+    end
 end
 
 return Ne0eLibrary
